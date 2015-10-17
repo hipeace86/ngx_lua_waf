@@ -15,7 +15,7 @@ ngx_lua_waf是我刚入职趣游时候开发的一个基于ngx_lua的web应用�
 	屏蔽异常的网络请求
 	屏蔽图片附件类目录php执行权限
 	防止webshell上传
-  指定URL的cc攻击(author:hipeace86)
+	指定URL的cc攻击(author:hipeace86)
 
 ###推荐安装:
 
