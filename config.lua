@@ -1,6 +1,6 @@
-RulePath = "/usr/local/nginx/conf/waf/wafconf/"
+RulePath = "/data/www/ngx_lua_waf/wafconf/"
 attacklog = "on"
-logdir = "/usr/local/nginx/logs/hack/"
+logdir = "/usr/local/openresty/nginx/logs"
 UrlDeny="on"
 Redirect="on"
 CookieMatch="on"
@@ -11,6 +11,8 @@ ipWhitelist={"127.0.0.1"}
 ipBlocklist={"1.0.0.1"}
 CCDeny="off"
 CCrate="100/60"
+LimitDenyUrl = "on"
+LimitDenyCrate="5/600"
 html=[[
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">

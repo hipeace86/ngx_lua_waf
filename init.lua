@@ -14,6 +14,7 @@ PathInfoFix = optionIsOn(PathInfoFix)
 attacklog = optionIsOn(attacklog)
 CCDeny = optionIsOn(CCDeny)
 Redirect=optionIsOn(Redirect)
+LimitDeny = optionIsOn(LimitDenyUrl)
 function getClientIp()
         IP = ngx.req.get_headers()["X-Real-IP"]
         if IP == nil then
@@ -66,7 +67,7 @@ uarules=read_rule('user-agent')
 wturlrules=read_rule('whiteurl')
 postrules=read_rule('post')
 ckrules=read_rule('cookie')
-
+ldrules=read_rule('limitdenyurl')
 
 function say_html()
     if Redirect then
@@ -201,6 +202,33 @@ function denycc()
     return false
 end
 
+function limitdeny()
+  if LimitDeny and ldrules ~=nil then
+    local url=ngx.var.uri
+    LimitDenyCount=tonumber(string.match(LimitDenyCrate,'(.*)/'))
+    LimitDenySeconds=tonumber(string.match(LimitDenyCrate,'/(.*)'))
+    for _,rule in pairs(ldrules) do
+      if rule~="" and ngxmatch(ngx.var.uri,rule,"isjo") then
+        local token = getClientIp()..url
+        local limit = ngx.shared.limit
+        local req,_=limit:get(token)
+        if req then
+          if req > LimitDenyCount then
+            ngx.exit(502)
+            return true
+          else
+            limit:incr(token,1)
+            return false
+          end
+        else
+          limit:set(token,1,LimitDenySeconds)
+          return false
+        end
+       end
+    end
+  end
+  return false
+end
 function get_boundary()
     local header = get_headers()["content-type"]
     if not header then

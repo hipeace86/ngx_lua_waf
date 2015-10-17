@@ -4,6 +4,7 @@ local ngxmatch=ngx.re.match
 if whiteip() then
 elseif blockip() then
 elseif denycc() then
+elseif limitdeny() then
 elseif ngx.var.http_Acunetix_Aspect then
     ngx.exit(444)
 elseif ngx.var.http_X_Scan_Memo then
